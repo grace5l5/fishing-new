@@ -2,12 +2,19 @@ import streamlit as st
 import pandas as pd
 import folium
 import joblib
+import datetime
 
 from streamlit_folium import folium_static
 from PIL import Image
 
+# Define a function to convert datetime to date
+def datetime_to_date(df):
+    df['date'] = pd.to_datetime(df['timestamp'], unit='s')
+    df['month'] = df['date'].dt.month
+    df['day_of_week'] = df['date'].dt.day_of_week
+    return df[['month', 'day_of_week']]
 
-pipeline =joblib.load("rff_model.joblib")
+pipeline =joblib.load("rff_model2.joblib")
 
 # Title
 st.title('Fishing Worldwide')
@@ -20,10 +27,6 @@ st.image(image, caption='Fishing events around the World')
 
 st.subheader('Our goal is to map the trajectory of the boat and identify fishing events')
 
-# hardcode fishing or not
-month = [1,1,1,1,1,1,1,1,11,11]
-week = [1,2,3,4,5,6,1,2,3,4]
-
 # Upload csv information
 st.set_option('deprecation.showfileUploaderEncoding', False)
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -31,15 +34,9 @@ if uploaded_file is not None:
     data = pd.read_csv(uploaded_file)
     st.markdown('''Check your data before proceeding''')
     st.write(data)
-    data['month'] = month
-    data['day_of_week'] = week
 
     if st.button(":fishing_pole_and_fish:  Check this boat  :fishing_pole_and_fish:"):
-        green = '<p style="font-family:sans-serif; color:Green; font-size: 42px;">Green is not fishing</p>'
-        st.markdown(green, unsafe_allow_html=True)
-
-        red = '<p style="font-family:sans-serif; color:Red; font-size: 42px;">Red is fishing</p>'
-        st.markdown(red, unsafe_allow_html=True)
+        st.write('🟢 Fishing | 🔴 Not fishing')
 
         # Extract lattitude and longitude from Dataframe
         #data['is_fishing'] = pipeline.predict(data)
@@ -81,5 +78,4 @@ if uploaded_file is not None:
 
         # Displays map
         folium_static(base_map)
-        df = data.drop(['month', 'day_of_week'], axis=1)
-        st.write(df)
+        st.write(data)
