@@ -61,11 +61,11 @@ if uploaded_file is not None:
 
         # Create markers for each fishing event
         for fish in fishing:
-            icon=folium.Icon(color='white', icon_color="green")
+            icon=folium.Icon(color='white', icon_color="red")
             folium.Marker(fish, icon=icon).add_to(base_map)
 
         for notfish in not_fishing:
-            icon=folium.Icon(color='white', icon_color="red")
+            icon=folium.Icon(color='white', icon_color="green")
             folium.Marker(notfish, icon=icon).add_to(base_map)
 
         # Create line that connect points
@@ -81,4 +81,5 @@ if uploaded_file is not None:
 
         # Displays map
         folium_static(base_map)
-        st.write(data)
+        df = data.drop(['month', 'day_of_week'], axis=1)
+        st.write(df)
