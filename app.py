@@ -36,7 +36,7 @@ if uploaded_file is not None:
     st.write(data)
 
     if st.button(":fishing_pole_and_fish:  Check this boat  :fishing_pole_and_fish:"):
-        st.write('🟢 Fishing | 🔴 Not fishing')
+        st.write('🟢 Not fishing | 🔴 Fishing')
 
         # Extract lattitude and longitude from Dataframe
         #data['is_fishing'] = pipeline.predict(data)
